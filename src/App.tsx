@@ -10,6 +10,10 @@ import { FilePreviewModal } from './components/FilePreviewModal';
 import { BatchSummaryModal } from './components/BatchSummaryModal';
 import { HistoryView } from './components/HistoryView';
 import { QuickToolsGrid } from './components/QuickToolsGrid';
+import { ImageToolPage } from './pages/ImageToolPage';
+import { PdfToolPage } from './pages/PdfToolPage';
+import { TextDataToolPage } from './pages/TextDataToolPage';
+import { OcrToolPage } from './pages/OcrToolPage';
 import type { FileItem, FormatCategory, ConversionMode, ConversionOptions } from './types';
 import { executeFileConversion } from './services/workerQueue';
 import { createZipArchive } from './services/converters/archiveConverter';
@@ -233,6 +237,28 @@ export function App() {
 
   const completedCount = queue.filter((q) => q.status === 'completed').length;
 
+  const sharedProps = {
+    queue,
+    selectedIds,
+    isProcessing,
+    mode,
+    onFilesAdded: handleFilesAdded,
+    onToggleSelect: handleToggleSelect,
+    onSelectAll: handleSelectAll,
+    onConvertAll: handleConvertAll,
+    onConvertSelected: handleConvertSelected,
+    onDownloadAllZip: handleDownloadAllZip,
+    onClearCompleted: handleClearCompleted,
+    onClearAll: handleClearAll,
+    onApplyFormatToAll: handleApplyFormatToAll,
+    onUpdateOutputFormat: handleUpdateOutputFormat,
+    onRemoveItem: handleRemoveItem,
+    onRetryItem: handleRetryItem,
+    onOpenPreview: setPreviewItem,
+    onOpenSettings: setSettingsItem,
+    onDownloadItem: handleDownloadItem,
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Top Navbar */}
@@ -250,9 +276,28 @@ export function App() {
 
         {/* Right Main Content Panel */}
         <main className="flex-1 flex flex-col gap-6 min-w-0">
-          {activeCategory === 'history' ? (
+          {activeCategory === 'history' && (
             <HistoryView history={history} onRefresh={refreshHistory} />
-          ) : (
+          )}
+
+          {activeCategory === 'image' && (
+            <ImageToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'pdf' && (
+            <PdfToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'text_data' && (
+            <TextDataToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'ocr' && (
+            <OcrToolPage {...sharedProps} />
+          )}
+
+          {(activeCategory === 'universal' ||
+            !['history', 'image', 'pdf', 'text_data', 'ocr'].includes(activeCategory)) && (
             <>
               {/* Universal Dropzone */}
               <UniversalUploadZone onFilesAdded={handleFilesAdded} activeCategory={activeCategory} />
