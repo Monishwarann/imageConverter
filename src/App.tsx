@@ -10,10 +10,21 @@ import { FilePreviewModal } from './components/FilePreviewModal';
 import { BatchSummaryModal } from './components/BatchSummaryModal';
 import { HistoryView } from './components/HistoryView';
 import { QuickToolsGrid } from './components/QuickToolsGrid';
+
+// Dedicated Tool Pages for EACH purpose
 import { ImageToolPage } from './pages/ImageToolPage';
 import { PdfToolPage } from './pages/PdfToolPage';
+import { DocumentToolPage } from './pages/DocumentToolPage';
+import { SpreadsheetToolPage } from './pages/SpreadsheetToolPage';
+import { PresentationToolPage } from './pages/PresentationToolPage';
+import { VectorToolPage } from './pages/VectorToolPage';
 import { TextDataToolPage } from './pages/TextDataToolPage';
+import { EbookToolPage } from './pages/EbookToolPage';
+import { ArchiveToolPage } from './pages/ArchiveToolPage';
+import { FontToolPage } from './pages/FontToolPage';
+import { SubtitleToolPage } from './pages/SubtitleToolPage';
 import { OcrToolPage } from './pages/OcrToolPage';
+
 import type { FileItem, FormatCategory, ConversionMode, ConversionOptions } from './types';
 import { executeFileConversion } from './services/workerQueue';
 import { createZipArchive } from './services/converters/archiveConverter';
@@ -288,16 +299,47 @@ export function App() {
             <PdfToolPage {...sharedProps} />
           )}
 
+          {activeCategory === 'document' && (
+            <DocumentToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'spreadsheet' && (
+            <SpreadsheetToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'presentation' && (
+            <PresentationToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'vector' && (
+            <VectorToolPage {...sharedProps} />
+          )}
+
           {activeCategory === 'text_data' && (
             <TextDataToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'ebook' && (
+            <EbookToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'archive' && (
+            <ArchiveToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'font' && (
+            <FontToolPage {...sharedProps} />
+          )}
+
+          {activeCategory === 'subtitle' && (
+            <SubtitleToolPage {...sharedProps} />
           )}
 
           {activeCategory === 'ocr' && (
             <OcrToolPage {...sharedProps} />
           )}
 
-          {(activeCategory === 'universal' ||
-            !['history', 'image', 'pdf', 'text_data', 'ocr'].includes(activeCategory)) && (
+          {activeCategory === 'universal' && (
             <>
               {/* Universal Dropzone */}
               <UniversalUploadZone onFilesAdded={handleFilesAdded} activeCategory={activeCategory} />
