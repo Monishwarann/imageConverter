@@ -167,4 +167,4 @@ The optimized static build will be generated in the `dist/` directory.
 
 Distributed under the **MIT License**. See `LICENSE` for details.
 
-Developed with ❤️ by **[Monishwarann](https://github.com/Monishwarann)**.
+Developed with by **[Monishwarann](https://github.com/Monishwarann)**.
