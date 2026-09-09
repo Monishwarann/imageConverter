@@ -3,7 +3,7 @@ import { UniversalUploadZone } from '../components/UniversalUploadZone';
 import { ConversionQueue } from '../components/ConversionQueue';
 import { BatchControls } from '../components/BatchControls';
 import type { FileItem, ConversionMode } from '../types';
-import { FileText } from 'lucide-react';
+import { FileText, Combine, FileCheck, Shield, Sparkles } from 'lucide-react';
 
 interface PdfToolPageProps {
   queue: FileItem[];
@@ -28,41 +28,70 @@ interface PdfToolPageProps {
 }
 
 export const PdfToolPage: React.FC<PdfToolPageProps> = (props) => {
-  const [activeTab, setActiveTab] = useState<'convert' | 'merge'>('convert');
+  const [pdfToolMode, setPdfToolMode] = useState<'convert' | 'merge' | 'watermark'>('convert');
   const pdfQueue = props.queue.filter((q) => q.category === 'pdf');
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Tool Header */}
-      <div className="glass-panel p-6 rounded-3xl border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
-            <FileText className="w-6 h-6 text-white" />
+      {/* Hero Banner Azure/Sapphire Theme */}
+      <div className="relative overflow-hidden glass-panel p-8 rounded-3xl border border-blue-500/30 bg-gradient-to-r from-blue-950/80 via-slate-900/90 to-cyan-950/80 shadow-2xl shadow-blue-950/50">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-500 via-indigo-600 to-cyan-500 flex items-center justify-center shadow-xl shadow-blue-500/40">
+              <FileText className="w-7 h-7 text-white" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <h2 className="text-2xl font-black text-white tracking-tight">PDF Toolkit Studio</h2>
+                <span className="px-2.5 py-0.5 text-[10px] font-extrabold bg-blue-500/20 text-blue-300 border border-blue-500/30 rounded-full uppercase tracking-wider">
+                  PDF-Lib Powered
+                </span>
+              </div>
+              <p className="text-xs text-slate-300 max-w-xl leading-relaxed">
+                Merge PDFs, split pages, extract text & images, watermark, compress & convert PDF to DOCX, TXT, HTML, JPG, PNG or WebP.
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-xl font-bold text-white">PDF Toolkit Pro</h2>
-            <p className="text-xs text-slate-400">Merge PDFs, convert PDF to DOCX/TXT/Images, add watermarks & compress.</p>
+
+          <div className="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800 text-xs font-bold">
+            <button
+              onClick={() => setPdfToolMode('convert')}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition-all ${
+                pdfToolMode === 'convert'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <FileCheck className="w-4 h-4" />
+              <span>Convert PDF</span>
+            </button>
+
+            <button
+              onClick={() => setPdfToolMode('merge')}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl transition-all ${
+                pdfToolMode === 'merge'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <Combine className="w-4 h-4" />
+              <span>Merge PDFs</span>
+            </button>
           </div>
         </div>
 
-        {/* Sub-tools Tab Switcher */}
-        <div className="flex items-center gap-1 bg-slate-900/80 p-1 rounded-2xl border border-slate-800 text-xs font-semibold">
-          <button
-            onClick={() => setActiveTab('convert')}
-            className={`px-3 py-1.5 rounded-xl transition-all ${
-              activeTab === 'convert' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            PDF Convert
-          </button>
-          <button
-            onClick={() => setActiveTab('merge')}
-            className={`px-3 py-1.5 rounded-xl transition-all ${
-              activeTab === 'merge' ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            Merge PDFs
-          </button>
+        {/* Feature Highlights Pills */}
+        <div className="mt-6 pt-6 border-t border-blue-900/40 flex flex-wrap items-center gap-3 text-xs">
+          <div className="flex items-center gap-1.5 bg-blue-950/60 px-3 py-1.5 rounded-xl border border-blue-800/40 text-blue-300 font-semibold">
+            <Shield className="w-3.5 h-3.5 text-blue-400" />
+            <span>Watermarking & Page Numbers</span>
+          </div>
+          <div className="flex items-center gap-1.5 bg-cyan-950/60 px-3 py-1.5 rounded-xl border border-cyan-800/40 text-cyan-300 font-semibold">
+            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Searchable Text Extractor</span>
+          </div>
         </div>
       </div>
 

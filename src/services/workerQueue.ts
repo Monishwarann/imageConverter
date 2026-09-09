@@ -15,15 +15,20 @@ export async function executeFileConversion(
   item: FileItem,
   onProgress?: (progress: number) => void
 ): Promise<{ blob: Blob; fileName: string; size: number }> {
-  const { file, selectedOutputFormat, category, customOptions } = item;
+  const { file, selectedOutputFormat, category, customOptions, detectedFormat } = item;
 
   if (onProgress) onProgress(20);
 
   let result: { blob: Blob; fileName: string };
 
   try {
-    // 1. OCR Category
-    if (category === 'ocr') {
+    // 0. PDF Format Priority Router
+    if (detectedFormat === 'PDF' || file.type === 'application/pdf') {
+      result = await convertPdf(file, selectedOutputFormat, customOptions);
+      if (onProgress) onProgress(90);
+    }
+    // 1. OCR Category (Images)
+    else if (category === 'ocr') {
       result = await performOcr(file, selectedOutputFormat, customOptions, (p) => {
         if (onProgress) onProgress(p.progress);
       });
